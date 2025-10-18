@@ -1,65 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio of Doom</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Share Tech Mono', monospace;
-      background: radial-gradient(circle at center, #000000 0%, #0a0a0a 100%);
-      color: #00ffe0;
-      text-align: center;
+      background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
+      color: #ccc;
       overflow-x: hidden;
     }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: -1;
+    }
+
     header {
-      padding: 80px 20px;
-      background: url('https://www.transparenttextures.com/patterns/stardust.png');
-      background-size: cover;
-      box-shadow: 0 0 20px #00ffe0;
+      text-align: center;
+      padding: 4rem 2rem;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      color: #aaa;
     }
-    h1 {
-      font-size: 3em;
-      text-shadow: 0 0 20px #00ffe0;
-      margin-bottom: 10px;
+
+    .projects {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
     }
-    p {
-      font-size: 1.2em;
-      color: #ccc;
-    }
-    .mutavi-link {
-      display: inline-block;
-      margin-top: 40px;
-      padding: 12px 24px;
-      background: #00ffe0;
-      color: #000;
-      text-decoration: none;
+
+    .card {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid #333;
       border-radius: 8px;
-      box-shadow: 0 0 10px #00ffe0;
-      transition: transform 0.2s ease;
+      width: 300px;
+      padding: 1.5rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      backdrop-filter: blur(4px);
     }
-    .mutavi-link:hover {
-      transform: scale(1.05);
-      background: #00ccaa;
+
+    .card:hover {
+      transform: scale(1.05) rotate(-0.5deg);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     }
-    footer {
-      margin-top: 60px;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #666;
+
+    .timeline {
+      margin: 4rem auto;
+      max-width: 800px;
+      border-left: 2px solid #444;
+      padding-left: 2rem;
+    }
+
+    .event {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .event::before {
+      content: '';
+      position: absolute;
+      left: -1.1rem;
+      top: 0.5rem;
+      width: 0.8rem;
+      height: 0.8rem;
+      background: #555;
+      border-radius: 50%;
+    }
+
+    .event h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #bbb;
+    }
+
+    .event p {
+      margin: 0.5rem 0 0;
+      font-size: 0.95rem;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to the Doom</h1>
-    <p>“Mutavi is HIM.”</p>
-    <a class="mutavi-link" href="https://github.com/joshisnthere" target="_blank">Visit Mutavis Portfolio</a>
-  </header>
+  <canvas id="stars"></canvas>
+  <header>Portfolio of Doom</header>
 
-  <footer>
-    © Joshua — Portfolio of Doom 2025 - Carlynn is stupid
-  </footer>
+  <section class="projects">
+    <div class="card">
+      <h3>Project Alpha</h3>
+      <p>Dark mode UI with glitch transitions and cosmic loading states.</p>
+    </div>
+    <div class="card">
+      <h3>Project Beta</h3>
+      <p>Terminal-style dashboard with animated data streams and void-core vibes.</p>
+    </div>
+    <div class="card">
+      <h3>Project Gamma</h3>
+      <p>Black hole visualizer using canvas and particle physics simulation.</p>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <div class="event">
+      <h3>2023 — Awakening</h3>
+      <p>Started building with HTML/CSS. First sparks of transformation.</p>
+    </div>
+    <div class="event">
+      <h3>2024 — Expansion</h3>
+      <p>Learned Git, pushed first repo, began shaping the Doom aesthetic.</p>
+    </div>
+    <div class="event">
+      <h3>2025 — Singularity</h3>
+      <p>Launched portfolio_of_doom. Entered the anti-spiral flow.</p>
+    </div>
+  </section>
+
+  <script>
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 300; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.2,
+          speed: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#444';
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      initStars();
+    });
+
+    resize();
+    initStars();
+    drawStars();
+  </script>
 </body>
 </html>
